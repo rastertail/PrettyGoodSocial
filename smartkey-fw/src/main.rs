@@ -1,10 +1,12 @@
 #![no_std]
 #![no_main]
 
+use arduino_hal::prelude::_ufmt_uWrite;
+use base64::{engine::general_purpose::STANDARD, Engine};
 use panic_halt as _;
 
-const PRIVATE_KEY: &'static [u8; 48] = include_bytes!("./signing.der");
-const PUBLIC_KEY: &'static [u8; 44] = include_bytes!("./public.der");
+const PRIVATE_KEY: &'static [u8; 32] = include_bytes!("./private_key.bin");
+const PUBLIC_KEY: &'static [u8; 32] = include_bytes!("./public_key.bin");
 
 #[link(name = "c25519")]
 extern "C" {
@@ -42,9 +44,9 @@ fn main() -> ! {
             unsafe {
                 edsign_sign(
                     (&mut signature).as_mut_ptr(),
-                    PUBLIC_KEY[12..].as_ptr(),
-                    PRIVATE_KEY[16..].as_ptr(),
-                    (&data_buf).as_ptr(),
+                    PUBLIC_KEY as _,
+                    PRIVATE_KEY as _,
+                    (&data_buf) as _,
                     len as _,
                 );
             }
@@ -52,16 +54,20 @@ fn main() -> ! {
             led.set_high();
             while button.is_high() {}
 
-            for b in signature {
-                serial.write_byte(b);
-            }
+            let mut b64 = [0u8; 88];
+            STANDARD.encode_slice(&signature, &mut b64).unwrap();
+            serial
+                .write_str(unsafe { core::str::from_utf8_unchecked(&b64) })
+                .unwrap();
         } else {
             led.set_high();
             while button.is_high() {}
 
-            for b in &PUBLIC_KEY[12..] {
-                serial.write_byte(*b);
-            }
+            let mut b64 = [0u8; 44];
+            STANDARD.encode_slice(PUBLIC_KEY, &mut b64).unwrap();
+            serial
+                .write_str(unsafe { core::str::from_utf8_unchecked(&b64) })
+                .unwrap();
         }
     }
 }

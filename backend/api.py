@@ -19,3 +19,9 @@ async def display_name(request: Request) -> Response:
         await conn.execute(insert(user_table()).values(key=pub_key_bytes, name=name))
 
     return Response()
+
+
+async def post(request: Request) -> Response:
+    body = await request.json()
+    print(body["content"])
+    return Response()

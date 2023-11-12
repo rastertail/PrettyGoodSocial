@@ -4,19 +4,19 @@ from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
 
 from .auth import AuthMiddleware, challenge
-from .api import display_name
-from .ui import index, post
+from .api import display_name, post
+from .ui import index
 
 
 app = Starlette(
     routes=[
         Route("/", index),
-        Route("/post", post),
         Route("/api/challenge", challenge, methods=["POST"]),
         Mount(
             "/api",
             routes=[
                 Route("/display_name", display_name, methods=["POST"]),
+                Route("/post", post, methods=["POST"]),
             ],
             middleware=[Middleware(AuthMiddleware)],
         ),

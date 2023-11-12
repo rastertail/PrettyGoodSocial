@@ -2,7 +2,7 @@
   "name": "prettygoodsocial-js",
   "version": "1.0.0",
   "scripts": {
-    "build": "esbuild src/post.ts src/register.ts --bundle --outdir=bundled"
+    "build": "esbuild src/index.ts src/post.ts src/register.ts --bundle --outdir=bundled"
   },
   "devDependencies": {
     "esbuild": "0.19.5"
