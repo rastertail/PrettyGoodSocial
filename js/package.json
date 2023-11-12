@@ -1,0 +1,13 @@
+{
+  "name": "prettygoodsocial-js",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "esbuild src/register.ts --bundle --outdir=bundled"
+  },
+  "devDependencies": {
+    "esbuild": "0.19.5"
+  },
+  "dependencies": {
+    "@noble/ed25519": "2.0.0"
+  }
+}
