@@ -11,3 +11,7 @@ def templates() -> Jinja2Templates:
 
 async def index(request: Request):
     return templates().TemplateResponse(request, "index.html")
+
+
+async def post(request: Request):
+    return templates().TemplateResponse(request, "post.html")

@@ -41,7 +41,7 @@ const main = async () => {
             });
             const sig = await ed.signAsync(encoder.encode(register_req), priv_key);
 
-            const register_res = await fetch("/api/register", {
+            const register_res = await fetch("/api/display_name", {
                 method: "POST",
                 body: register_req,
                 headers: {
